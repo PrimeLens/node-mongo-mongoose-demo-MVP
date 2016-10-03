@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">    
+	<meta name="format-detection" content="telephone=no">
+</head>
+<body>
+    <div class="container">
+        <h2>node-mongo-mongoose-demo-MVP</h2>
+        <br/>
+        <a class="btn btn-default btn-small" href="/get/filmlist" target="_blank">Get all filmlist</a>
+        <a class="btn btn-default btn-small" data-film="bladerunner" href="javascript:void(0)">Post Blade Runner</a>
+        <a class="btn btn-default btn-small" data-film="apocalypse" href="javascript:void(0)">Post Apocalypse Now</a>
+        <a class="btn btn-default btn-small" data-film="metropolis" href="javascript:void(0)">Post Metropolis</a>
+        <a class="btn btn-default btn-small" href="/get/findfilm?seenIt=false" target="_blank">Find films I've not seen</a>
+        <a class="btn btn-default btn-small" data-delete="myfilmlists" href="javascript:void(0)" target="_blank">Delete Collection</a>
+    </div>
+</body>
+
+        <link rel="stylesheet" type="text/css" href="bootstrap/bootstrap.min.css">
+        <script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
+        <style>.btn { display: block; float: left; clear: both; margin-bottom: 10px; }</style>
+
+        <script>
+            function handlePost(url, payload){
+                $.ajax({     
+                    url: url,     
+                    type: 'POST',      
+                    data: JSON.stringify(payload),
+                    contentType: 'application/json'            
+                })
+                .done(function(data){ alert((payload.name?payload.name+' ':'') + JSON.stringify(data) ) ;})
+                .fail(function(xhr, strErr){ alert('failed ajax call ', strErr);});               
+            }  
+            $('[data-film]').click(function(){ 
+                var key = $(this).attr('data-film');
+                var payload = data[key];
+                handlePost( 'post/film', payload ); 
+            }); 
+            $('[data-delete]').click(function(){ 
+                var name = $(this).attr('data-delete');
+                handlePost( 'post/deletecollection', {collectionName : name} ); 
+            });
+
+            var data = {};
+            data.bladerunner = {
+                year : 1982,
+                name : 'Blade Runner',
+                seenIt: true,
+                credits: {
+                    director : 'Ridley Scott',
+                    cinematographer : 'Jordan Cronenweth',
+                    producer : 'Michael Deeley'
+                },
+                cast : ['Harrison Ford', 'Rutger Hauer']
+            };
+            data.apocalypse = {
+                year : 1979,
+                name : 'Apocalypse Now',
+                seenIt: true,
+                credits: {
+                    director : 'Francis Coppola',
+                    cinematographer : 'Vittorio Storaro',
+                    producer : 'Francis Coppola'
+                },
+                cast : ['Marlon Brando', 'Martin Sheen', 'Dennis Hopper']
+            };
+            data.metropolis = {
+                year : 1927,
+                name : 'Metropolis',
+                seenIt: false,
+                credits: {
+                    director : 'Fritz Lang',
+                    cinematographer : 'Karl Freund',
+                    producer : 'Erich Pommer'
+                },
+                cast : ['Alfred Abel', 'Brigitte Helm', 'Gustav Fröhlich', 'Rudolf Klein-Rogge'],
+                extraInfo : {
+                    technical : 'Black & white film',
+                    country : 'German'
+                }
+            };
+        </script>
+</html>
