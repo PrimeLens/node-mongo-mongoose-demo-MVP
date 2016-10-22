@@ -15,7 +15,7 @@ module.exports = function(dbconnect){
     var app = express();
 
     app.use( bodyParser.json() );
-    app.use(  bodyParser.urlencoded({extended: true})  );
+    app.use( bodyParser.urlencoded({extended: true}) );
 
 
     // this sets up the public directory so <img> tags can make get requests
