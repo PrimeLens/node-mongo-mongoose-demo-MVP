@@ -31,7 +31,9 @@ var keys = require('../../keys').mongo;
 
 
 /* mongolab */
-mongoose.connect('mongodb://' + keys.username + ':' + keys.password + '@ds043200.mlab.com:43200/myfilms')
+mongoose.connect('mongodb://' + keys.username + ':' + keys.password + '@ds063536.mlab.com:63536/firefly');
+
+
 
 
 module.exports = mongoose.connection;

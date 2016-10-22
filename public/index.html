@@ -12,11 +12,11 @@
     <div class="container">
         <h2>node-mongo-mongoose-demo-MVP</h2>
         <br/>
-        <a class="btn btn-default btn-small" href="/get/filmlist" target="_blank">Get all filmlist</a>
+        <a class="btn btn-default btn-small" href="/films" target="_blank">Get all filmlist</a>
         <a class="btn btn-default btn-small" data-film="bladerunner" href="javascript:void(0)">Post Blade Runner</a>
         <a class="btn btn-default btn-small" data-film="apocalypse" href="javascript:void(0)">Post Apocalypse Now</a>
         <a class="btn btn-default btn-small" data-film="metropolis" href="javascript:void(0)">Post Metropolis</a>
-        <a class="btn btn-default btn-small" href="/get/findfilm?seenIt=false" target="_blank">Find films I've not seen</a>
+        <a class="btn btn-default btn-small" href="/films?seenIt=false" target="_blank">Find films I've not seen</a>
         <a class="btn btn-default btn-small" data-delete="myfilmlists" href="javascript:void(0)" target="_blank">Delete Collection</a>
     </div>
 </body>
@@ -26,28 +26,37 @@
         <style>.btn { display: block; float: left; clear: both; margin-bottom: 10px; }</style>
 
         <script>
-            function handlePost(url, payload){
-                $.ajax({     
+
+            /*
+                
+                THIS CLIENT SIDE IS DELIVERATELY SPARSE AS THE PURPOSE OF THIS REPO 
+                IS TO DEMO THE BACKEND NODE / MONGO CODE
+
+            */
+
+            function handleAjax(url, payload, verb){
+                var ajaxConfig = {     
                     url: url,     
-                    type: 'POST',      
-                    data: JSON.stringify(payload),
+                    type: verb,      
                     contentType: 'application/json'            
-                })
-                .done(function(data){ alert((payload.name?payload.name+' ':'') + JSON.stringify(data) ) ;})
-                .fail(function(xhr, strErr){ alert('failed ajax call ', strErr);});               
+                }
+                if (payload) ajaxConfig.data = JSON.stringify(payload);               
+                $.ajax(ajaxConfig)
+                    .done(function(data){ alert((payload ? payload.name+' ' : '') + JSON.stringify(data) ) ;})
+                    .fail(function(xhr, strErr){ alert('failed ajax call ', strErr);});               
             }  
             $('[data-film]').click(function(){ 
                 var key = $(this).attr('data-film');
-                var payload = data[key];
-                handlePost( 'post/film', payload ); 
+                var payload = hardcodeddata[key];
+                handleAjax( 'films', payload, 'POST'); 
             }); 
             $('[data-delete]').click(function(){ 
                 var name = $(this).attr('data-delete');
-                handlePost( 'post/deletecollection', {collectionName : name} ); 
+                handleAjax( 'films?collectionName='+name, null, 'DELETE'); 
             });
 
-            var data = {};
-            data.bladerunner = {
+            var hardcodeddata = {};
+            hardcodeddata.bladerunner = {
                 year : 1982,
                 name : 'Blade Runner',
                 seenIt: true,
@@ -58,7 +67,7 @@
                 },
                 cast : ['Harrison Ford', 'Rutger Hauer']
             };
-            data.apocalypse = {
+            hardcodeddata.apocalypse = {
                 year : 1979,
                 name : 'Apocalypse Now',
                 seenIt: true,
@@ -69,7 +78,7 @@
                 },
                 cast : ['Marlon Brando', 'Martin Sheen', 'Dennis Hopper']
             };
-            data.metropolis = {
+            hardcodeddata.metropolis = {
                 year : 1927,
                 name : 'Metropolis',
                 seenIt: false,

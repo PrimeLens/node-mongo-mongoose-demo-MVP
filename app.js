@@ -2,7 +2,7 @@
 
 
 var _ = require('underscore');
-var get_filmlist = require('./proj_modules/mongo/get_filmlist');
+
 var post_film = require('./proj_modules/mongo/post_film');
 var delete_collection = require('./proj_modules/mongo/delete_collection');
 var find_film = require('./proj_modules/mongo/find_film');
@@ -25,14 +25,7 @@ module.exports = function(dbconnect){
 
 
     // demonstrates retreival with a get request
-    app.get('/get/filmlist', function(req, res){
-        console.log('get all films');  
-        get_filmlist(function(data){
-            console.log('sending response');
-            res.json( data );
-        });  
-    }); 
-    app.get('/get/findfilm', function(req, res){       
+    app.get('/films', function(req, res){       
         console.log('get films filter : '+JSON.stringify(req.query) );  
         find_film (req.query, function(data){
             console.log('sending response');
@@ -41,7 +34,7 @@ module.exports = function(dbconnect){
     }); 
 
     // add a new film with a post request
-    app.post('/post/film', function(req, res){
+    app.post('/films', function(req, res){
         console.log('attempting to add ' + req.body.name);        
         post_film(req.body, function(data){
             console.log('sending response');            
@@ -50,9 +43,9 @@ module.exports = function(dbconnect){
     });
 
     // empty the collection
-    app.post('/post/deletecollection', function(req, res){
-        console.log('attempting to delete ' + req.body.collectionName);
-        delete_collection(dbconnect, req.body.collectionName, function(data){
+    app.delete('/films', function(req, res){
+        console.log('attempting to delete ' + req.query.collectionName);
+        delete_collection(dbconnect, req.query.collectionName, function(data){
             console.log('sending response');
             res.json( data );
         });
