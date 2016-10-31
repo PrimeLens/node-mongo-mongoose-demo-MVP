@@ -30,9 +30,18 @@ var keys = require('../../keys').mongo;
 */
 
 
-/* mongolab */
-mongoose.connect('mongodb://' + keys.username + ':' + keys.password + '@ds063536.mlab.com:63536/firefly');
 
+
+// newly arrived warning  "Mongoose: mpromise (mongoose's default promise library) is deprecated, plug in your own promise library instead: http://mongoosejs.com/docs/promises.html"
+// this is caused by mongoose methods returning a promise even though we are using callbacks
+// the solution is to add the following line of code, also documented here at this thread https://github.com/Automattic/mongoose/issues/4291
+mongoose.Promise = global.Promise;
+
+
+
+
+/* mongolab */
+mongoose.connect('mongodb://' + keys.username + ':' + keys.password + '@ds139277.mlab.com:39277/mongo-mongoose-demo');
 
 
 
